@@ -14,8 +14,9 @@ const UserSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-    roleId: {
+    role: {
       type: String,
+      required: true,
     },
     password: {
       type: String,
@@ -28,19 +29,20 @@ const UserSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: ''
+      default: '',
     },
     profilePictureId: {
-      type: String
+      type: String,
+      default: '',
     },
     phone: {
       type: String,
       default: '',
     },
-    dataOfBirth: {
+    dateOfBirth: {
       type: Date,
     },
-    academicPositionId: {
+    academicPosition: {
       type: String,
     },
     expertField: {

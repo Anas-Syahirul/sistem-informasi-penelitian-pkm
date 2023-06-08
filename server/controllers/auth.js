@@ -6,9 +6,24 @@ import UserRole from '../models/UserRole.js';
 
 export const register = async (req, res) => {
   try {
-    const { name, email, roleName, password, nip, academicPosition } = req.body;
+    const {
+      name,
+      email,
+      roleName,
+      password,
+      nip,
+      phone,
+      dateOfBirth,
+      academicPosition,
+      expertField,
+    } = req.body;
 
     const userRole = await UserRole.findOne({ name: roleName });
+
+    if (!userRole) {
+      res.status(404).json({ msg: 'User Role Not Found' });
+      return;
+    }
     const acadPosition = await AcademicPosition.findOne({
       name: academicPosition,
     });
@@ -23,10 +38,13 @@ export const register = async (req, res) => {
     const newUser = new User({
       name,
       email,
-      roleId: userRole._id,
+      phone,
+      role: userRole.name,
       password: passwordHash,
       nip,
-      academicPositionId: acadPosition._id,
+      dateOfBirth,
+      academicPosition: acadPosition.name,
+      expertField,
     });
 
     const savedUser = await newUser.save();
@@ -39,7 +57,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email }).lean();
     if (!user) {
       return res.status(400).json({ msg: 'User does not exist' });
     }
