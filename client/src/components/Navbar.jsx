@@ -20,13 +20,13 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FlexBetween from './FlexBetween';
 import { setLogout, setMode } from 'state';
+import { useNavigate } from 'react-router-dom';
 
-const settings = ['Profile', 'Logout'];
-
-const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+const Navbar = ({ isSidebarOpen, setIsSidebarOpen, active, setActive }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -86,7 +86,13 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItem
+                onClick={() => {
+                  navigate(`profile`);
+                  setActive('profile');
+                  setAnchorElUser(null);
+                }}
+              >
                 <Typography textAlign='center'>Profile</Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(setLogout())}>

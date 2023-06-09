@@ -11,7 +11,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import {
@@ -21,30 +21,35 @@ import {
   HomeOutlined,
   LoginOutlined,
   Person2Outlined,
+  SchoolOutlined,
   ScienceOutlined,
-  SettingsOutlined,
 } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogout } from 'state';
 
-const navItems = [
+const navItemsDosen = [
   {
     text: 'Dashboard',
+    route: null,
     icon: <HomeOutlined />,
   },
   {
     text: 'Profile',
+    route: null,
     icon: <Person2Outlined />,
   },
   {
-    text: 'Daftar Penelitian dan PkM',
+    text: 'Daftar Penelitian dan PkM yang telah Selesai',
     icon: null,
   },
   {
     text: 'Penelitian',
+    route: 'finished-research',
     icon: <ScienceOutlined />,
   },
   {
     text: 'Pengabdian Masyarakat',
+    route: 'finished-pkm',
     icon: <Diversity1Outlined />,
   },
   {
@@ -53,6 +58,43 @@ const navItems = [
   },
   {
     text: 'Log Out',
+    route: null,
+    icon: <LoginOutlined />,
+  },
+];
+
+const navItemsLppm = [
+  {
+    text: 'Dashboard',
+    route: null,
+    icon: <HomeOutlined />,
+  },
+  {
+    text: 'Profile',
+    route: null,
+    icon: <Person2Outlined />,
+  },
+  {
+    text: 'Daftar Penelitian dan PkM yang telah Selesai',
+    icon: null,
+  },
+  {
+    text: 'Penelitian',
+    route: 'finished-research',
+    icon: <ScienceOutlined />,
+  },
+  {
+    text: 'Pengabdian Masyarakat',
+    route: 'finished-pkm',
+    icon: <Diversity1Outlined />,
+  },
+  {
+    text: ' ',
+    icon: null,
+  },
+  {
+    text: 'Log Out',
+    route: null,
     icon: <LoginOutlined />,
   },
 ];
@@ -62,12 +104,15 @@ const Sidebar = ({
   isSidebarOpen,
   setIsSidebarOpen,
   isNonMobile,
+  active,
+  setActive,
 }) => {
   const { pathname } = useLocation();
-  const [active, setActive] = useState('');
   const navigate = useNavigate();
   const theme = useTheme();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navItems = user.role === 'Dosen' ? navItemsDosen : navItemsLppm;
 
   useEffect(() => {
     setActive(pathname.substring(1));
@@ -108,7 +153,7 @@ const Sidebar = ({
             </FlexBetween>
           </Box>
           <List>
-            {navItems.map(({ text, icon }) => {
+            {navItems.map(({ text, route, icon }) => {
               if (!icon) {
                 return (
                   <Typography key={text} sx={{ m: '2.25rem 0 1rem 2rem' }}>
@@ -116,15 +161,21 @@ const Sidebar = ({
                   </Typography>
                 );
               }
-              const lowerCaseText = text.toLocaleLowerCase();
+              const lowerCaseText = route
+                ? route.toLocaleLowerCase()
+                : text.toLocaleLowerCase();
 
               return (
                 <ListItem key={text} disablePadding>
                   <ListItemButton
-                    onClick={() => {
-                      navigate(`${lowerCaseText}`);
-                      setActive(lowerCaseText);
-                    }}
+                    onClick={
+                      lowerCaseText === 'log out'
+                        ? () => dispatch(setLogout())
+                        : () => {
+                            navigate(`${lowerCaseText}`);
+                            setActive(lowerCaseText);
+                          }
+                    }
                     sx={{
                       backgroundColor:
                         active === lowerCaseText
@@ -186,7 +237,7 @@ const Sidebar = ({
                   {user.role}
                 </Typography>
               </Box>
-              <SettingsOutlined
+              <SchoolOutlined
                 sx={{ color: theme.palette.secondary[300], fontSize: '25px' }}
               />
             </FlexBetween>

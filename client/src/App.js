@@ -4,6 +4,8 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Dashboard from 'scenes/dashboard';
+import FinishedPkm from 'scenes/finished-pkm';
+import FinishedResearch from 'scenes/finished-research';
 import Layout from 'scenes/layout';
 import Login from 'scenes/login';
 import Profile from 'scenes/profile';
@@ -26,8 +28,8 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/profile' element={<Profile />} />
               {/* <Route path='/add-announcement' element={<}/> */}
-              {/* <Route path='/finished-pkm' element={<FinishedPkm />} />
-              <Route path='/finished-research' element={<FinishedResearch />} /> */}
+              <Route path='/finished-pkm' element={<FinishedPkm />} />
+              <Route path='/finished-research' element={<FinishedResearch />} />
             </Route>
           </Routes>
         </ThemeProvider>

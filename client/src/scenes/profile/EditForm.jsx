@@ -136,7 +136,7 @@ const EditForm = () => {
             <Box
               display='grid'
               gap='30px'
-              width={'1100px'}
+              width={'61vw'}
               // gridTemplateColumns='repeat(4, minmax(0, 1fr))'
               sx={{
                 '& > div': { gridColumn: isNonMobile ? undefined : 'span 12' },
