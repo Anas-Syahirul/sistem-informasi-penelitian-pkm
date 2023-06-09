@@ -9,6 +9,7 @@ import {
   updateStatus,
   updateStatusAndRevisionNote,
   updateMonitoring,
+  getFinishedResearch,
 } from '../controllers/activity.js';
 import { verifyToken } from '../middleware/auth.js';
 import upload from '../services/multer.js';
@@ -23,6 +24,7 @@ router.post(
 );
 
 router.get('/finished-status', verifyToken, getFinishedActivity);
+router.get('/finished-research', verifyToken, getFinishedResearch);
 router.get('/id/:activityId', verifyToken, getActivityById);
 router.get('/reviewer/:reviewerId', verifyToken, getActivityByReviewer);
 

@@ -43,7 +43,7 @@ export const createAnnouncement = async (req, res) => {
 
     const newAnnouncement = new Announcement({
       userId: req.user.id,
-      activityTypeId: activityType._id,
+      activityTypeId: activityType.name,
       academicPositionRequiredId,
       title,
       imageUrl: dataImg.url,
@@ -138,7 +138,7 @@ export const updateAnnouncement = async (req, res) => {
 
     const newAnnouncement = new Announcement({
       userId: req.user.id,
-      activityTypeId: activityType._id,
+      activityTypeId: activityType.name,
       title,
       imageUrl: dataImg.url,
       imageUrlId: dataImg.public_id,

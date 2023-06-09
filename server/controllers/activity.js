@@ -68,7 +68,27 @@ export const getFinishedActivity = async (req, res) => {
       name: 'selesai',
     });
     const activities = await Activity.find({
-      activityStatusId: finishedActivityStatus._id,
+      activityTypeId: 'penelitian',
+      activityStatusId: finishedActivityStatus.name,
+    });
+    if (!activities) {
+      res.status(200).json({ msg: "There's no finished activity" });
+      return;
+    }
+    res.status(200).json(activities);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const getFinishedResearch = async (req, res) => {
+  try {
+    const finishedActivityStatus = await ActivityStatus.findOne({
+      name: 'selesai',
+    });
+    const activities = await Activity.find({
+      activityTypeId: 'penelitian',
+      activityStatusId: finishedActivityStatus.name,
     });
     if (!activities) {
       res.status(200).json({ msg: "There's no finished activity" });
