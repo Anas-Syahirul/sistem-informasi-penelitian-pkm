@@ -2,16 +2,18 @@ import mongoose from 'mongoose';
 
 const AnnouncementSchema = new mongoose.Schema(
   {
-    userId: {
-      type: String,
-      default: '',
-      required: true,
-    },
-    activityTypeId: {
+    postedBy: {
       type: String,
       required: true,
     },
-    academicPositionRequiredId: {
+    editedBy: {
+      type: String,
+    },
+    activityType: {
+      type: String,
+      required: true,
+    },
+    academicPositionRequired: {
       type: Array,
       required: true,
     },
@@ -19,14 +21,14 @@ const AnnouncementSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    imageUrl: {
-      type: String,
-      default: '',
-    },
-    imageUrlId: {
-      type: String,
-      default: '',
-    },
+    // imageUrl: {
+    //   type: String,
+    //   default: '',
+    // },
+    // imageUrlId: {
+    //   type: String,
+    //   default: '',
+    // },
     content: {
       type: String,
       required: true,

@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import announcementRoutes from './routes/announcement.js';
 import activityRoutes from './routes/activity.js';
+import letterOfAssignmentRoutes from './routes/letterOfAssignment.js';
 import cloudinary from 'cloudinary';
 
 dotenv.config();
@@ -45,3 +46,4 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/announcement', announcementRoutes);
 app.use('/activity', activityRoutes);
+app.use('/letter-of-assignment', letterOfAssignmentRoutes);

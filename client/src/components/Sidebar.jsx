@@ -15,6 +15,9 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import {
+  AnnouncementOutlined,
+  ArticleOutlined,
+  AssignmentOutlined,
   ChevronLeft,
   ChevronRightOutlined,
   Diversity1Outlined,
@@ -26,6 +29,7 @@ import {
 } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogout } from 'state';
+import Announcement from 'scenes/announcement';
 
 const navItemsDosen = [
   {
@@ -37,6 +41,21 @@ const navItemsDosen = [
     text: 'Profile',
     route: null,
     icon: <Person2Outlined />,
+  },
+  {
+    text: 'Announcement',
+    route: null,
+    icon: <AnnouncementOutlined />,
+  },
+  {
+    text: 'Activity',
+    route: null,
+    icon: <AssignmentOutlined />,
+  },
+  {
+    text: 'Review Proposal',
+    route: 'review-proposal',
+    icon: <ArticleOutlined />,
   },
   {
     text: 'Daftar Penelitian dan PkM yang telah Selesai',
@@ -73,6 +92,16 @@ const navItemsLppm = [
     text: 'Profile',
     route: null,
     icon: <Person2Outlined />,
+  },
+  {
+    text: 'Announcement',
+    route: null,
+    icon: <AnnouncementOutlined />,
+  },
+  {
+    text: 'Activity',
+    route: null,
+    icon: <AssignmentOutlined />,
   },
   {
     text: 'Daftar Penelitian dan PkM yang telah Selesai',

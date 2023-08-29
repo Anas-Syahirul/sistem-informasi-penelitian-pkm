@@ -32,13 +32,11 @@ export const changeProfPict = async (req, res) => {
       }
     );
 
-    res
-      .status(200)
-      .json({
-        msg: 'Profile Picture has been updated',
-        profilePicture: data.url,
-        profilePictureId: data.public_id,
-      });
+    res.status(200).json({
+      msg: 'Profile Picture has been updated',
+      profilePicture: data.url,
+      profilePictureId: data.public_id,
+    });
   } catch (err) {
     res.status(400).json({ error: err });
   }
@@ -81,7 +79,7 @@ export const updateProfile = async (req, res) => {
       return res.status(404).json({ msg: 'User not found' });
     }
     const {
-      username,
+      name,
       email,
       role,
       nip,
@@ -102,7 +100,7 @@ export const updateProfile = async (req, res) => {
       { _id: req.user.id },
       {
         $set: {
-          username,
+          name,
           email,
           role,
           nip,
@@ -148,5 +146,31 @@ export const editPassword = async (req, res) => {
     return res.status(200).json({ msg: 'Password succesfully changed' });
   } catch (err) {
     return res.json({ msg: err.message });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
+export const getAllDosenName = async (req, res) => {
+  try {
+    // const username = await User.find({}, { name: 1, _id: 0 });
+    let names = [];
+    const username = (await User.find({ role: 'Dosen' })).forEach((doc) => {
+      names.push(`${doc.name} - ${doc.nip}`);
+    });
+    return res.status(200).json(names);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
   }
 };

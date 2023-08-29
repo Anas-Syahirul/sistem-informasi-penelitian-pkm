@@ -17,7 +17,7 @@ import {
   NotificationsNoneOutlined,
 } from '@mui/icons-material';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FlexBetween from './FlexBetween';
 import { setLogout, setMode } from 'state';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +27,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, active, setActive }) => {
   const theme = useTheme();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -54,20 +55,20 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, active, setActive }) => {
 
         {/* RIGHT SIDE */}
         <FlexBetween gap='1.5rem'>
-          <IconButton onClick={() => dispatch(setMode())}>
+          {/* <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === 'dark' ? (
               <DarkModeOutlined sx={{ fontSize: '25px' }} />
             ) : (
               <LightModeOutlined sx={{ fontSize: '25px' }} />
             )}
-          </IconButton>
-          <IconButton>
+          </IconButton> */}
+          {/* <IconButton>
             <NotificationsNoneOutlined sx={{ fontSize: '25px' }} />
-          </IconButton>
+          </IconButton> */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title='User Account'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                <Avatar alt={user.name} src={user.profilePicture} />
               </IconButton>
             </Tooltip>
             <Menu

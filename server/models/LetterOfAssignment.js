@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 
 const LetterOfAssignmentSchema = new mongoose.Schema(
   {
-    activityId: {
+    announcementId: {
       type: String,
       required: true,
     },
-    userId: {
-      type: String,
-      required: true,
+    uploader: {
+      _id: String,
+      name: String,
     },
     documentUrl: String,
     documentUrlId: String,

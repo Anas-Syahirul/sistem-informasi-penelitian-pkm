@@ -15,8 +15,11 @@ import * as yup from 'yup';
 import { Formik } from 'formik';
 
 const validationSchema = yup.object().shape({
-  email: yup.string().email('invalid email').required('required'),
-  password: yup.string().required('required'),
+  email: yup
+    .string()
+    .email('Enter a valid email')
+    .required('This field is required'),
+  password: yup.string().required('This field is required'),
 });
 
 const initialValues = {

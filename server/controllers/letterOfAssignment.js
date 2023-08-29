@@ -1,9 +1,11 @@
 import LetterOfAssignment from '../models/LetterOfAssignment.js';
 import ActivityType from '../models/ActivityType.js';
+import Activity from '../models/Activity.js';
 import {
   uploadToCloudinary,
   removeFromCloudinary,
-} from '../services/cloudinary';
+} from '../services/cloudinary.js';
+import Announcement from '../models/Announcement.js';
 
 export const createLOA = async (req, res) => {
   try {
@@ -12,13 +14,29 @@ export const createLOA = async (req, res) => {
       'letter-of-assignment'
     );
 
-    const { activityId, userId } = req.body;
+    const userId = req.user.id;
+    const { username } = req.body;
+    const { announcementId } = req.params;
+    const announcement = await Announcement.findById(announcementId);
     const newLOA = new LetterOfAssignment({
-      activityId,
-      userId,
+      announcementId,
+      uploader: {
+        _id: userId,
+        name: username,
+      },
       documentUrl: document.url,
       documentUrlId: document.public_id,
     });
+
+    const activities = await Activity.updateMany(
+      { announcementId, activityStatus: 'proposal disetujui' },
+      {
+        $set: {
+          letterOfAssignmentUrl: document.url,
+          activityStatus: 'pelaksanaan',
+        },
+      }
+    );
 
     const savedLOA = await newLOA.save();
 

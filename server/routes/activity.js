@@ -10,6 +10,14 @@ import {
   updateStatusAndRevisionNote,
   updateMonitoring,
   getFinishedResearch,
+  getActivityByLeaderId,
+  getActivityByMemberId,
+  addReviewer,
+  getActivityReviewerNull,
+  getMemberName,
+  getFinishedPkM,
+  updateProposal,
+  getCountActivityByAnnouncementId,
 } from '../controllers/activity.js';
 import { verifyToken } from '../middleware/auth.js';
 import upload from '../services/multer.js';
@@ -25,10 +33,20 @@ router.post(
 
 router.get('/finished-status', verifyToken, getFinishedActivity);
 router.get('/finished-research', verifyToken, getFinishedResearch);
+router.get('/finished-pkm', verifyToken, getFinishedPkM);
 router.get('/id/:activityId', verifyToken, getActivityById);
-router.get('/reviewer/:reviewerId', verifyToken, getActivityByReviewer);
+router.get(
+  '/count/idAnnounce/:announcementId',
+  verifyToken,
+  getCountActivityByAnnouncementId
+);
+router.get('/reviewer/nullReviewer', verifyToken, getActivityReviewerNull);
+router.get('/reviewer/id', verifyToken, getActivityByReviewer);
+router.get('/leaderId', verifyToken, getActivityByLeaderId);
+router.get('/memberId', verifyToken, getActivityByMemberId);
+router.get('/member', verifyToken, getMemberName);
 
-router.put('/reviewer/:activityId', verifyToken, updateReviewer);
+router.put('/reviewer/:activityId', verifyToken, addReviewer);
 router.put(
   '/final-report/:activityId',
   verifyToken,
@@ -37,7 +55,14 @@ router.put(
 );
 router.put('/status/:activityId', verifyToken, updateStatus);
 router.put(
-  '/status-revision/:activityId/revision',
+  '/proposal-revision/:activityId',
+  verifyToken,
+  upload.single('proposalFile'),
+  updateProposal
+);
+router.put('/status/:activityId', verifyToken, updateStatus);
+router.put(
+  '/status-revision/:activityId',
   verifyToken,
   updateStatusAndRevisionNote
 );

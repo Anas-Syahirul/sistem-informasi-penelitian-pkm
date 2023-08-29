@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   '/',
   verifyToken,
-  upload.single('announcePoster'),
+  // upload.single('announcePoster'),
   createAnnouncement
 );
 
@@ -24,7 +24,7 @@ router.get('/', verifyToken, getAllAnnouncement);
 router.put(
   '/:id',
   verifyToken,
-  upload.single('announcePoster'),
+  // upload.single('announcePoster'),
   updateAnnouncement
 );
 export default router;

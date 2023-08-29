@@ -233,8 +233,12 @@ const ProfileCard = () => {
                   onSubmit={handlePasswordChange}
                   initialValues={{ prevPassword: '', newPassword: '' }}
                   validationSchema={yup.object().shape({
-                    prevPassword: yup.string().required('must be filled'),
-                    newPassword: yup.string().required('must be filled'),
+                    prevPassword: yup
+                      .string()
+                      .required('This field is required'),
+                    newPassword: yup
+                      .string()
+                      .required('This field is required'),
                   })}
                 >
                   {({

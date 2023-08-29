@@ -5,6 +5,11 @@ import upload from '../services/multer.js';
 
 const router = express.Router();
 
-router.post('/', verifyToken, upload.single('letterOfAssignment'), createLOA);
+router.put(
+  '/:announcementId',
+  verifyToken,
+  upload.single('letterOfAssignment'),
+  createLOA
+);
 
 export default router;

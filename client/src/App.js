@@ -3,12 +3,15 @@ import { createTheme } from '@mui/material/styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Activity from 'scenes/activity';
+import Announcement from 'scenes/announcement';
 import Dashboard from 'scenes/dashboard';
 import FinishedPkm from 'scenes/finished-pkm';
 import FinishedResearch from 'scenes/finished-research';
 import Layout from 'scenes/layout';
 import Login from 'scenes/login';
 import Profile from 'scenes/profile';
+import ReviewProposal from 'scenes/review-proposal';
 import { themeSettings } from 'theme';
 
 function App() {
@@ -27,9 +30,11 @@ function App() {
               <Route path='/' element={<Navigate to='/dashboard' />} />
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/profile' element={<Profile />} />
-              {/* <Route path='/add-announcement' element={<}/> */}
+              <Route path='/announcement' element={<Announcement />} />
               <Route path='/finished-pkm' element={<FinishedPkm />} />
               <Route path='/finished-research' element={<FinishedResearch />} />
+              <Route path='/activity' element={<Activity />} />
+              <Route path='/review-proposal' element={<ReviewProposal />} />
             </Route>
           </Routes>
         </ThemeProvider>

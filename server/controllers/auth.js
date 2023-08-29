@@ -27,7 +27,7 @@ export const register = async (req, res) => {
     const acadPosition = await AcademicPosition.findOne({
       name: academicPosition,
     });
-    if (!acadPosition) {
+    if (roleName === 'Dosen' && !acadPosition) {
       res.status(404).json({ msg: 'Academic Position Not Found' });
       return;
     }
@@ -43,7 +43,7 @@ export const register = async (req, res) => {
       password: passwordHash,
       nip,
       dateOfBirth,
-      academicPosition: acadPosition.name,
+      academicPosition: roleName === 'Dosen' ? acadPosition.name : '',
       expertField,
     });
 

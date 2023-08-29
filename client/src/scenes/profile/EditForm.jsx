@@ -107,13 +107,16 @@ const EditForm = () => {
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required('required'),
-    email: yup.string().email('invalid email').required('required'),
-    role: yup.string().required('required'),
-    nip: yup.string().required('required'),
-    phone: yup.string().required('required'),
-    academicPosition: yup.string().required('required'),
-    expertField: yup.string().required('required'),
+    name: yup.string().required('This field is required'),
+    email: yup
+      .string()
+      .email('Enter a valid email')
+      .required('This field is required'),
+    role: yup.string().required('This field is required'),
+    nip: yup.string().required('This field is required'),
+    phone: yup.string().required('This field is required'),
+    academicPosition: yup.string().required('This field is required'),
+    expertField: yup.string().required('This field is required'),
   });
 
   return (
@@ -206,7 +209,7 @@ const EditForm = () => {
                 fullWidth
                 variant='filled'
                 type='text'
-                label='Phone'
+                label='Ho. Handphone'
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.phone}
@@ -259,19 +262,21 @@ const EditForm = () => {
                   </MenuItem>
                 </TextField>
               )}
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Expert Field'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.expertField}
-                name='expertField'
-                error={!!touched.expertField && !!errors.expertField}
-                helperText={touched.expertField && errors.expertField}
-                sx={{ gridColumn: 'span 6' }}
-              />
+              {user.role === 'Dosen' && (
+                <TextField
+                  fullWidth
+                  variant='filled'
+                  type='text'
+                  label='Expert Field'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.expertField}
+                  name='expertField'
+                  error={!!touched.expertField && !!errors.expertField}
+                  helperText={touched.expertField && errors.expertField}
+                  sx={{ gridColumn: 'span 6' }}
+                />
+              )}
               <Box sx={{ gridColumn: 'span 12' }} />
             </Box>
             <Box display='flex' justifyContent='end' mt='20px'>

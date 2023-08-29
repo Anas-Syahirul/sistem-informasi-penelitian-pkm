@@ -14,7 +14,7 @@ const Login = () => {
         p='1rem 6%'
         textAlign='center'
       >
-        <Typography fontWeight='bold' fontSize='32px' color='primary'>
+        <Typography fontWeight='bold' fontSize='32px' color='secondary'>
           Sistem Informasi
         </Typography>
       </Box>
@@ -25,8 +25,21 @@ const Login = () => {
         borderRadius='1.5rem'
         backgroundColor={theme.palette.background.alt}
       >
-        <Typography fontWeight='500' variant='h5' sx={{ mb: '1.5rem' }}>
-          Mohon Login terlebih dahulu...
+        <Typography
+          fontWeight='500'
+          variant='h4'
+          sx={{ mb: '1.5rem' }}
+          textAlign={'center'}
+        >
+          Selamat Datang Kembali!
+        </Typography>
+        <Typography
+          fontWeight='500'
+          variant='h6'
+          sx={{ mb: '1.5rem' }}
+          textAlign={'center'}
+        >
+          Silakan Masuk dengan Email
         </Typography>
         <LoginForm />
       </Box>

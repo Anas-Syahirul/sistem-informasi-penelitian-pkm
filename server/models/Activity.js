@@ -2,11 +2,14 @@ import mongoose from 'mongoose';
 
 const ActivitySchema = new mongoose.Schema(
   {
-    activityTypeId: String,
+    activityType: String,
     announcementId: String,
     title: String,
-    leaderId: String,
-    memberId: {
+    leader: {
+      _id: String,
+      name: String,
+    },
+    member: {
       type: Array,
       default: [],
     },
@@ -18,7 +21,7 @@ const ActivitySchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    reviewerId: {
+    reviewer: {
       type: Array,
       default: [],
     },
@@ -36,7 +39,8 @@ const ActivitySchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    activityStatusId: String,
+    activityStatus: String,
+    letterOfAssignmentUrl: String,
   },
   { timestamps: true }
 );
