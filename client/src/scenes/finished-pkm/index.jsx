@@ -40,7 +40,7 @@ const FinishedPkm = () => {
 
   useEffect(() => {
     getFinishedPkm();
-  });
+  }, []);
 
   const getFinishedPkm = async () => {
     try {

@@ -27,7 +27,7 @@ import { ArrowBackIosOutlined } from '@mui/icons-material';
 
 const CreateAnnouncement = ({ mode, setMode }) => {
   const [dateValue, setDateValue] = useState(Date.now());
-  const [endDate, setEndDate] = useState(Date.now());
+  const [monitoringDate, setMonitoringDate] = useState(Date.now());
   const user = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -84,10 +84,10 @@ const CreateAnnouncement = ({ mode, setMode }) => {
       dayjs(dateValue).get('month'),
       dayjs(dateValue).get('date') + 1
     );
-    values['endDate'] = new Date(
-      dayjs(endDate).get('year'),
-      dayjs(endDate).get('month'),
-      dayjs(endDate).get('date') + 1
+    values['monitoringDate'] = new Date(
+      dayjs(monitoringDate).get('year'),
+      dayjs(monitoringDate).get('month'),
+      dayjs(monitoringDate).get('date') + 1
     );
     values['userId'] = user._id;
     let acadPos = [];
@@ -109,10 +109,10 @@ const CreateAnnouncement = ({ mode, setMode }) => {
           dayjs(dateValue).get('month'),
           dayjs(dateValue).get('date') + 1
         ),
-        endDate: new Date(
-          dayjs(endDate).get('year'),
-          dayjs(endDate).get('month'),
-          dayjs(endDate).get('date') + 1
+        monitoringDate: new Date(
+          dayjs(monitoringDate).get('year'),
+          dayjs(monitoringDate).get('month'),
+          dayjs(monitoringDate).get('date') + 1
         ),
       },
       onSubmitProps
@@ -277,7 +277,7 @@ const CreateAnnouncement = ({ mode, setMode }) => {
                   rows={8}
                   variant='filled'
                   type='text'
-                  label='Content'
+                  label='Deskripsi'
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.content}
@@ -291,13 +291,13 @@ const CreateAnnouncement = ({ mode, setMode }) => {
                     label='Batas Pengajuan Proposal'
                     defaultValue={dayjs(dateValue)}
                     onChange={(newValue) => setDateValue(newValue)}
-                    sx={{ gridColumn: 'span 6' }}
+                    sx={{ gridColumn: 'span 6', width: '15%' }}
                   />
                   <DatePicker
-                    label='Waktu Berakhirnya Program'
-                    defaultValue={dayjs(endDate)}
-                    onChange={(newValue) => setEndDate(newValue)}
-                    sx={{ gridColumn: 'span 6' }}
+                    label='Waktu Pelaksanaan Monitoring'
+                    defaultValue={dayjs(monitoringDate)}
+                    onChange={(newValue) => setMonitoringDate(newValue)}
+                    sx={{ gridColumn: 'span 6', width: '15%' }}
                   />
                 </LocalizationProvider>
               </Box>

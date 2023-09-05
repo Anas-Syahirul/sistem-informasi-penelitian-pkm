@@ -30,7 +30,14 @@ const Announcement = () => {
           setUserAnnouncement={setUserAnnouncement}
         />
       )}
-      {mode === 'edit' && <EditAnnouncement mode={mode} setMode={setMode} />}
+      {mode === 'edit' && (
+        <EditAnnouncement
+          mode={mode}
+          setMode={setMode}
+          announcement={announcement}
+          setAnnouncement={setAnnouncement}
+        />
+      )}
 
       {mode === 'detail' && (
         <DetailAnnouncement

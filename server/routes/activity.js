@@ -18,6 +18,12 @@ import {
   getFinishedPkM,
   updateProposal,
   getCountActivityByAnnouncementId,
+  countFinishedResearch,
+  countFinishedPkM,
+  updateMonitoringNote,
+  countOnGoingResearch,
+  countOnGoingPkM,
+  getRecentActivity,
 } from '../controllers/activity.js';
 import { verifyToken } from '../middleware/auth.js';
 import upload from '../services/multer.js';
@@ -45,6 +51,11 @@ router.get('/reviewer/id', verifyToken, getActivityByReviewer);
 router.get('/leaderId', verifyToken, getActivityByLeaderId);
 router.get('/memberId', verifyToken, getActivityByMemberId);
 router.get('/member', verifyToken, getMemberName);
+router.get('/count-finished-research', verifyToken, countFinishedResearch);
+router.get('/count-finished-pkm', verifyToken, countFinishedPkM);
+router.get('/countOnGoingResearch', verifyToken, countOnGoingResearch);
+router.get('/countOnGoingPkM', verifyToken, countOnGoingPkM);
+router.get('/recent-activity', verifyToken, getRecentActivity);
 
 router.put('/reviewer/:activityId', verifyToken, addReviewer);
 router.put(
@@ -67,5 +78,6 @@ router.put(
   updateStatusAndRevisionNote
 );
 router.put('/monitoring/:activityId', verifyToken, updateMonitoring);
+router.put('/monitoringNote/:activityId', verifyToken, updateMonitoringNote);
 
 export default router;

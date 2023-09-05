@@ -17,7 +17,7 @@ export const createAnnouncement = async (req, res) => {
       academicPositionRequired,
       content,
       proposalSubmisionDeadline,
-      endDate,
+      monitoringDate,
     } = req.body;
     // const user = await User.findById(userId);
     const activityType = await ActivityType.findOne({ name: activityTypeName });
@@ -51,7 +51,7 @@ export const createAnnouncement = async (req, res) => {
       // imageUrlId: dataImg.public_id,
       content,
       proposalSubmisionDeadline: new Date(proposalSubmisionDeadline),
-      endDate: new Date(endDate),
+      monitoringDate: new Date(monitoringDate),
     });
     const savedAnnouncement = await newAnnouncement.save();
 
@@ -163,9 +163,10 @@ export const updateAnnouncement = async (req, res) => {
     const {
       activityTypeName,
       title,
+      academicPositionRequired,
       content,
       proposalSubmisionDeadline,
-      endDate,
+      monitoringDate,
     } = req.body;
     // const user = await User.findById(userId);
     const activityType = await ActivityType.findOne({ name: activityTypeName });
@@ -173,6 +174,17 @@ export const updateAnnouncement = async (req, res) => {
     if (activityType == undefined) {
       res.status(400).json({ msg: 'Activity Type Undefined' });
       return;
+    }
+
+    for (let x in academicPositionRequired) {
+      let academicPositionRequiredIdTemp = await AcademicPosition.findOne({
+        name: academicPositionRequired[x],
+      });
+      if (!academicPositionRequiredIdTemp) {
+        res.status(404).json({ msg: 'Academic Position Undefined' });
+        return;
+      }
+      // academicPositionRequiredId.push(academicPositionRequiredIdTemp);
     }
 
     // if (prevAnnouncement.imageUrlId !== '') {
@@ -186,11 +198,12 @@ export const updateAnnouncement = async (req, res) => {
       userId: req.user.id,
       activityType: activityType.name,
       title,
+      academicPositionRequired,
       // imageUrl: dataImg.url,
       // imageUrlId: dataImg.public_id,
       content,
       proposalSubmisionDeadline: new Date(proposalSubmisionDeadline),
-      endDate,
+      monitoringDate,
     });
 
     const announcement = await Announcement.updateOne(
@@ -200,6 +213,7 @@ export const updateAnnouncement = async (req, res) => {
           userId: newAnnouncement.userId,
           activityType: newAnnouncement.activityType,
           title: newAnnouncement.title,
+          academicPositionRequired: newAnnouncement.academicPositionRequired,
           // imageUrl: newAnnouncement.imageUrl,
           // imageUrlId: newAnnouncement.imageUrlId,
           content: newAnnouncement.content,

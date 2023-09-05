@@ -53,7 +53,7 @@ export const createActivity = async (req, res) => {
       proposalUrl: proposalFile.url,
       proposalUrlId: proposalFile.public_id,
       activityStatus: 'pengumpulan proposal',
-      endDate: announcement.endDate,
+      monitoringDate: announcement.monitoringDate,
     });
 
     const savedActivity = await newActivity.save();
@@ -169,7 +169,11 @@ export const getMemberName = async (req, res) => {
 export const getActivityReviewerNull = async (req, res) => {
   try {
     const activities = await Activity.find({
-      reviewer: { $exists: true, $eq: [] },
+      $or: [
+        { activityStatus: 'pengumpulan proposal' },
+        { activityStatus: 'pelaksanaan' },
+        { reviewer: { $exists: true, $eq: [] } },
+      ],
     });
     return res.status(200).json(activities);
   } catch (err) {
@@ -447,5 +451,112 @@ export const updateMonitoring = async (req, res) => {
       .json({ msg: 'Monitoring Date has been successfully updated' });
   } catch (err) {
     res.status(500).json({ msg: err.message });
+  }
+};
+
+export const updateMonitoringNote = async (req, res) => {
+  try {
+    const { activityId } = req.params;
+    const { monitoringNote } = req.body;
+    console.log(monitoringNote);
+    const updatedActivity = await Activity.updateOne(
+      { _id: activityId },
+      {
+        $set: {
+          monitoringNote,
+        },
+      }
+    );
+
+    res
+      .status(200)
+      .json({ msg: 'Monitoring Note has been successfully updated' });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const countFinishedResearch = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const activities = await Activity.find({
+      activityType: 'Penelitian',
+      activityStatus: 'published',
+      $or: [
+        { leader: { _id: req.user.id, name: user.name } },
+        { member: { $in: { _id: user._id, name: user.name } } },
+      ],
+    }).countDocuments();
+    return res.status(200).json({ total: activities });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const countFinishedPkM = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const countFinishedPkM = await Activity.find({
+      activityType: 'PkM',
+      activityStatus: 'published',
+      $or: [
+        { leader: { _id: req.user.id, name: user.name } },
+        { member: { $in: { _id: user._id, name: user.name } } },
+      ],
+    }).countDocuments();
+    return res.status(200).json({ total: countFinishedPkM });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const countOnGoingResearch = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const countOnGoingResearch = await Activity.find({
+      activityType: 'Penelitian',
+      activityStatus: 'pelaksanaan',
+      $or: [
+        { leader: { _id: req.user.id, name: user.name } },
+        { member: { $in: { _id: user._id, name: user.name } } },
+      ],
+    }).countDocuments();
+    return res.status(200).json({ total: countOnGoingResearch });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
+export const countOnGoingPkM = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const countOnGoingPkm = await Activity.find({
+      activityType: 'PkM',
+      activityStatus: 'pelaksanaan',
+      $or: [
+        { leader: { _id: req.user.id, name: user.name } },
+        { member: { $in: { _id: user._id, name: user.name } } },
+      ],
+    }).countDocuments();
+    return res.status(200).json({ total: countOnGoingPkm });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
+export const getRecentActivity = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const activity = await Activity.find({
+      $or: [
+        { leader: { _id: req.user.id, name: user.name } },
+        { member: { $in: { _id: user._id, name: user.name } } },
+      ],
+    })
+      .sort({ createdAt: -1 })
+      .limit(5);
+    return res.status(200).json(activity);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
   }
 };

@@ -29,8 +29,11 @@ const ActivitySchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    endDate: Date,
     monitoringDate: Date,
+    monitoringNote: {
+      type: String,
+      default: '',
+    },
     finalReportUrl: {
       type: String,
       default: '',

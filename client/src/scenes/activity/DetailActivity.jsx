@@ -26,6 +26,7 @@ import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { useSelector } from 'react-redux';
+import * as yup from 'yup';
 
 const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
   const token = useSelector((state) => state.token);
@@ -40,6 +41,7 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
   const [isSubmitFinalReport, setIsSubmitFinalReport] = useState(false);
   const [isSubmitProposalRevision, setIsSubmitProposalRevision] =
     useState(false);
+  const [isAddMonitoringNote, setIsAddMonitoringNote] = useState(false);
 
   const getUserName = async (userId) => {
     try {
@@ -155,12 +157,38 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
     }
   };
 
+  const updateMonitoringNote = async (values, onSubmitProps) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/activity/monitoringNote/${activity._id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      onSubmitProps.resetForm();
+      setIsAddMonitoringNote(false);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const handleSubmitFinalReport = async (values, onSubmitProps) => {
     await addFinalReport(values, onSubmitProps);
   };
 
   const handleSubmitProposalRevision = async (values, onSubmitProps) => {
     await updateProposal(values, onSubmitProps);
+  };
+
+  const handleSubmitMonitoringNote = async (values, onSubmitProps) => {
+    await updateMonitoringNote(values, onSubmitProps);
   };
 
   const updateFieldValue = (index, value) => {
@@ -186,7 +214,7 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
     }
     setReviewer(reviewerName.toString());
     getUserName(activity.leader._id);
-    console.log(activity.proposalRevisionNote);
+    // console.log(activity.reviewer);
   }, [activity]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -256,20 +284,32 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
               </TableCell>
             </TableRow>
             {activity.activityStatus === 'pelaksanaan' && (
-              <TableRow>
-                <TableCell width='30%'>Surat Penugasan</TableCell>
-                <TableCell width='70%'>
-                  <Typography>
-                    <Link
-                      href={activity.proposalUrl}
-                      target='_blank'
-                      rel='noopener'
-                    >
-                      Dokumen Surat Penugasan
-                    </Link>
-                  </Typography>
-                </TableCell>
-              </TableRow>
+              <>
+                <TableRow>
+                  <TableCell width='30%'>Surat Penugasan</TableCell>
+                  <TableCell width='70%'>
+                    <Typography>
+                      <Link
+                        href={activity.proposalUrl}
+                        target='_blank'
+                        rel='noopener'
+                      >
+                        Dokumen Surat Penugasan
+                      </Link>
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell width='30%'>Catatan Monitoring</TableCell>
+                  <TableCell width='70%'>
+                    <Typography>
+                      <pre style={{ fontFamily: 'inherit' }}>
+                        {activity ? activity.monitoringNote : ''}
+                      </pre>
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </>
             )}
             {activity.activityStatus === 'revisi proposal' && (
               <TableRow>
@@ -372,34 +412,38 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
             )}
           </Formik>
         )}
-      {!isSubmitFinalReport && activity.activityStatus === 'pelaksanaan' && (
-        <Box my='20px'>
-          <Button
-            color='info'
-            variant='contained'
-            startIcon={<CloudUploadOutlined />}
-            onClick={() => setIsSubmitFinalReport(true)}
-          >
-            Submit Laporan Akhir
-          </Button>
-        </Box>
-      )}
+      {!isSubmitFinalReport &&
+        activity.activityStatus === 'pelaksanaan' &&
+        user.role === 'Dosen' && (
+          <Box my='20px'>
+            <Button
+              color='info'
+              variant='contained'
+              startIcon={<CloudUploadOutlined />}
+              onClick={() => setIsSubmitFinalReport(true)}
+            >
+              Submit Laporan Akhir
+            </Button>
+          </Box>
+        )}
 
-      {user.role === 'LPPM' && !isAddReviewer && (
-        <Box display='flex' justifyContent='start' mt='20px' mb='20px'>
-          <Button
-            startIcon={<RateReviewOutlined />}
-            color='secondary'
-            variant='contained'
-            onClick={() => {
-              getAllDosenName();
-              setIsAddReviewer(true);
-            }}
-          >
-            Tambah Reviewer
-          </Button>
-        </Box>
-      )}
+      {user.role === 'LPPM' &&
+        !isAddReviewer &&
+        activity.reviewer.length === 0 && (
+          <Box display='flex' justifyContent='start' mt='20px' mb='20px'>
+            <Button
+              startIcon={<RateReviewOutlined />}
+              color='secondary'
+              variant='contained'
+              onClick={() => {
+                getAllDosenName();
+                setIsAddReviewer(true);
+              }}
+            >
+              Tambah Reviewer
+            </Button>
+          </Box>
+        )}
 
       {isAddReviewer &&
         Array.from({ length: 2 }, (_, index) => (
@@ -484,6 +528,96 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
           </Box>
         )} */}
         </Box>
+      )}
+      {activity.monitoringNote === '' &&
+        user.role === 'LPPM' &&
+        !isAddMonitoringNote && (
+          <Box display='flex' justifyContent='start' mt='20px' mb='20px'>
+            <Button
+              startIcon={<RateReviewOutlined />}
+              color='secondary'
+              variant='contained'
+              onClick={() => {
+                setIsAddMonitoringNote(true);
+              }}
+            >
+              Tambahkan Catatan Monitoring
+            </Button>
+          </Box>
+        )}
+      {isAddMonitoringNote && (
+        <Formik
+          onSubmit={handleSubmitMonitoringNote}
+          initialValues={{ monitoringNote: '' }}
+          validationSchema={yup.object().shape({
+            monitoringNote: yup
+              .string()
+              .required('Catatan Monitoring harus diisi'),
+          })}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            setFieldValue,
+            resetForm,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box
+                width='100%'
+                border={`1px solid ${theme.palette.neutral.medium}`}
+                borderRadius='5px'
+                p='1rem'
+                my='20px'
+              >
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={7}
+                  variant='filled'
+                  type='text'
+                  label='Catatan Hasil Monitoring'
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.monitoringNote}
+                  name='monitoringNote'
+                  error={!!touched.monitoringNote && !!errors.monitoringNote}
+                  helperText={touched.monitoringNote && errors.monitoringNote}
+                  sx={{ gridColumn: 'span 6' }}
+                />
+              </Box>
+              <FlexBetween>
+                <Button
+                  onClick={() => setIsAddMonitoringNote(false)}
+                  sx={{
+                    m: '1rem',
+                    p: '0.5rem',
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.background.alt,
+                    '&:hover': { color: theme.palette.primary.main },
+                  }}
+                >
+                  Batal
+                </Button>
+                <Button
+                  type='submit'
+                  sx={{
+                    m: '1rem',
+                    p: '0.5rem',
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.background.alt,
+                    '&:hover': { color: theme.palette.primary.main },
+                  }}
+                >
+                  Kirim Catatan Monitoring
+                </Button>
+              </FlexBetween>
+            </form>
+          )}
+        </Formik>
       )}
       {isSubmitFinalReport && (
         <Formik

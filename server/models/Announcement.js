@@ -37,7 +37,7 @@ const AnnouncementSchema = new mongoose.Schema(
     proposalSubmisionDeadline: {
       type: Date,
     },
-    endDate: {
+    monitoringDate: {
       type: Date,
       required: true,
     },
