@@ -229,7 +229,7 @@ const Register = ({ announcement, idAnnouncement, mode, setMode }) => {
               </Box>
               <Box display='flex' justifyContent='end' mt='20px' mb='10px'>
                 <Button type='submit' color='secondary' variant='contained'>
-                  Register
+                  Ajukan Proposal
                 </Button>
               </Box>
             </form>

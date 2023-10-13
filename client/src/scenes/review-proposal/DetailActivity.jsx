@@ -96,6 +96,7 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
       const data = await response.json();
       console.log(data);
       onSubmitProps.resetForm();
+      setMode('showList');
     } catch (err) {
       console.log(err.message);
     }
@@ -291,10 +292,9 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
                 />
               </Box>
               <Button
-                fullWidth
                 type='submit'
                 sx={{
-                  m: '1rem 0',
+                  m: '0.5rem 1rem',
                   p: '0.5rem',
                   backgroundColor: theme.palette.primary.main,
                   color: theme.palette.background.alt,

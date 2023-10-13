@@ -1,4 +1,9 @@
-import { AddOutlined, EditOutlined } from '@mui/icons-material';
+import {
+  AddOutlined,
+  EditOutlined,
+  FileUploadOutlined,
+  InfoOutlined,
+} from '@mui/icons-material';
 import { Box, Button, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Header from 'components/Header';
@@ -52,7 +57,7 @@ const AnnouncementList = ({
       width: 140,
       renderCell: (params) => (
         <Button
-          startIcon={<EditOutlined />}
+          startIcon={<InfoOutlined />}
           onClick={() => handleButtonClick(params.row)}
           color='success'
           variant='contained'
@@ -73,10 +78,13 @@ const AnnouncementList = ({
 
   const getAnnouncements = async () => {
     try {
-      const response = await fetch('http://localhost:3001/announcement', {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        'http://localhost:3001/announcement/active',
+        {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const data = await response.json();
       setAnnouncements(data);
       console.log(data);
@@ -127,7 +135,7 @@ const AnnouncementList = ({
               color='secondary'
               variant='contained'
               onClick={() => setMode('create')}
-              startIcon={<AddOutlined />}
+              startIcon={<FileUploadOutlined />}
             >
               Upload Pengumuman
             </Button>

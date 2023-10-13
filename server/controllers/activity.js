@@ -544,6 +544,33 @@ export const countOnGoingPkM = async (req, res) => {
   }
 };
 
+// Untuk LPPM(Secara umum)
+export const countAllOnGoingResearch = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const countOnGoingResearch = await Activity.find({
+      activityType: 'Penelitian',
+      activityStatus: 'pelaksanaan',
+    }).countDocuments();
+    return res.status(200).json({ total: countOnGoingResearch });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
+export const countAllOnGoingPkM = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const countOnGoingPkm = await Activity.find({
+      activityType: 'PkM',
+      activityStatus: 'pelaksanaan',
+    }).countDocuments();
+    return res.status(200).json({ total: countOnGoingPkm });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
 export const getRecentActivity = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);

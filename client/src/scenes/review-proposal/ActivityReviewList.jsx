@@ -62,7 +62,7 @@ const ActivityReviewList = ({
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 120,
+      width: 140,
       renderCell: (params) => (
         <Button
           startIcon={<InfoOutlined />}

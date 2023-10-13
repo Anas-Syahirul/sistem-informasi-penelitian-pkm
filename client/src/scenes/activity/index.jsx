@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ActivityList from './ActivityList';
 import DetailActivity from './DetailActivity';
+import Header from 'components/Header';
 
 const Activity = () => {
   const theme = useTheme();
@@ -93,6 +94,7 @@ const Activity = () => {
 
   return (
     <Box m='1.5rem 2.5rem'>
+      <Header title='AKTIVITAS' subtitle='' />
       {mode === 'showList' && (
         <ActivityList
           mode={mode}

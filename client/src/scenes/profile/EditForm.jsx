@@ -149,7 +149,7 @@ const EditForm = () => {
                 fullWidth
                 variant='filled'
                 type='text'
-                label='Name'
+                label='Nama'
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.name}
@@ -232,7 +232,7 @@ const EditForm = () => {
                   select
                   variant='filled'
                   type='text'
-                  label='Academic Position'
+                  label='Jabatan Akademik'
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.academicPosition}
@@ -267,7 +267,7 @@ const EditForm = () => {
                   fullWidth
                   variant='filled'
                   type='text'
-                  label='Expert Field'
+                  label='Bidang Expert'
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.expertField}

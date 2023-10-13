@@ -24,6 +24,8 @@ import {
   countOnGoingResearch,
   countOnGoingPkM,
   getRecentActivity,
+  countAllOnGoingResearch,
+  countAllOnGoingPkM,
 } from '../controllers/activity.js';
 import { verifyToken } from '../middleware/auth.js';
 import upload from '../services/multer.js';
@@ -55,6 +57,8 @@ router.get('/count-finished-research', verifyToken, countFinishedResearch);
 router.get('/count-finished-pkm', verifyToken, countFinishedPkM);
 router.get('/countOnGoingResearch', verifyToken, countOnGoingResearch);
 router.get('/countOnGoingPkM', verifyToken, countOnGoingPkM);
+router.get('/count-all-OnGoingResearch', verifyToken, countAllOnGoingResearch);
+router.get('/count-all-OnGoingPkM', verifyToken, countAllOnGoingPkM);
 router.get('/recent-activity', verifyToken, getRecentActivity);
 
 router.put('/reviewer/:activityId', verifyToken, addReviewer);

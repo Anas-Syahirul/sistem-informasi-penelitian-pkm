@@ -193,33 +193,35 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-export const ActList = ({ activities = [], sx }) => {
-  // if (activities.length === 0) {
-  //   // Return a message or component when the products array is empty
-  //   return (
-  //     <Card sx={sx}>
-  //       <CardHeader title='Latest Activities' />
-  //       <Typography variant='body2' sx={{ padding: 2 }}>
-  //         No Activity Available.
-  //       </Typography>
-  //       <Divider />
-  //       <CardActions sx={{ justifyContent: 'flex-end' }}>
-  //         <Button
-  //           color='secondary'
-  //           endIcon={<ArrowRightIcon />}
-  //           size='small'
-  //           variant='text'
-  //         >
-  //           View all
-  //         </Button>
-  //       </CardActions>
-  //     </Card>
-  //   );
-  // }
+export const ActList = ({ activities = [], sx, title }) => {
+  // const navigate = useNavigate();
+  if (activities.length === 0) {
+    // Return a message or component when the products array is empty
+    return (
+      <Card sx={sx}>
+        <CardHeader title='Latest Activities' />
+        <Typography variant='body2' sx={{ padding: 2 }}>
+          No Activity Available.
+        </Typography>
+        <Divider />
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <Button
+            color='secondary'
+            endIcon={<ArrowRightIcon />}
+            size='small'
+            variant='text'
+          >
+            View all
+          </Button>
+        </CardActions>
+      </Card>
+    );
+  }
   return (
     <Card sx={sx}>
-      <CardHeader title='Latest Activities' />
+      <CardHeader title={title} />
       <List>
         {activities.map((activity, index) => {
           const hasDivider = index < activity.length - 1;
@@ -240,16 +242,19 @@ export const ActList = ({ activities = [], sx }) => {
         })}
       </List>
       <Divider />
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
+      {/* <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           color='secondary'
           endIcon={<ArrowRightIcon />}
           size='small'
           variant='text'
+          onClick={() => {
+            navigate('activity');
+          }}
         >
           Lihat Detail
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };

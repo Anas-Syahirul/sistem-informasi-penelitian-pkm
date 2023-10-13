@@ -49,7 +49,7 @@ const ActivityList = ({
   };
 
   const handleButtonClickDosen = (params) => {
-    console.log(params);
+    // console.log(params);
     setActivity(params);
     setMode('detail');
   };
@@ -100,7 +100,7 @@ const ActivityList = ({
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 120,
+      width: 140,
       renderCell: (params) => (
         <Button
           startIcon={<InfoOutlined />}
@@ -132,7 +132,7 @@ const ActivityList = ({
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 120,
+      width: 140,
       renderCell: (params) => (
         <Button
           startIcon={<InfoOutlined />}

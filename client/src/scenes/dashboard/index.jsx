@@ -19,6 +19,7 @@ import { ActList } from './ActList';
 
 const Dashboard = () => {
   const token = useSelector((state) => state.token);
+  const user = useSelector((state) => state.user);
   const [countResearch, setCountResearch] = useState(0);
   const [countPkm, setCountPkm] = useState(0);
   const [countOGPkm, setCountOGPkm] = useState(0);
@@ -26,11 +27,18 @@ const Dashboard = () => {
   const [recentActivity, setRecentActivity] = useState([]);
 
   useEffect(() => {
-    getCountResearch();
-    getCountPkm();
-    getCountOnGoingResearch();
-    getCountOnGoingPKM();
-    getRecentActivity();
+    if (user.role === 'LPPM') {
+      getRecentAnnouncement();
+      getCountAllOnGoingPKM();
+      getCountAllOnGoingResearch();
+    } else {
+      getRecentActivity();
+      getCountOnGoingResearch();
+      getCountOnGoingPKM();
+      getCountResearch();
+      getCountPkm();
+    }
+    // getRecentActivity();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getCountResearch = async () => {
@@ -101,6 +109,40 @@ const Dashboard = () => {
     }
   };
 
+  const getCountAllOnGoingResearch = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/activity/count-all-OnGoingResearch',
+        {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
+      setCountOGResearch(data.total);
+      console.log({ data });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const getCountAllOnGoingPKM = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/activity/count-all-OnGoingPkM',
+        {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
+      setCountOGPkm(data.total);
+      console.log({ data });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const getRecentActivity = async () => {
     try {
       const response = await fetch(
@@ -118,9 +160,25 @@ const Dashboard = () => {
     }
   };
 
+  const getRecentAnnouncement = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/announcement/recent-announcement',
+        {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
+      setRecentActivity(data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <Box m='1.5rem 2.5rem'>
-      <Header title='DASHBOARD' subtitle='Welcome to your dashboard' />
+      <Header title='DASHBOARD' subtitle='' />
       <Box
         component='main'
         sx={{
@@ -146,24 +204,28 @@ const Dashboard = () => {
                 value='$24k'
               />
             </Grid> */}
-            <Grid xs={12} sm={6} lg={2.5}>
-              <OverviewCard
-                sx={{ height: '100%', backgroundColor: '#415a77' }}
-                value={countResearch}
-                icon={<BiotechOutlined />}
-                title={'Publikasi Penelitian'}
-                iconColor={'#32ab32'}
-              />
-            </Grid>
-            <Grid xs={12} sm={6} lg={2.5}>
-              <OverviewCard
-                sx={{ height: '100%', backgroundColor: '#415a77' }}
-                value={countPkm}
-                icon={<PeopleOutlined />}
-                title={'Publikasi PkM'}
-                iconColor={'#32ab32'}
-              />
-            </Grid>
+            {user.role === 'Dosen' && (
+              <>
+                <Grid xs={12} sm={6} lg={2.5}>
+                  <OverviewCard
+                    sx={{ height: '100%', backgroundColor: '#415a77' }}
+                    value={countResearch}
+                    icon={<BiotechOutlined />}
+                    title={'Publikasi Penelitian'}
+                    iconColor={'#32ab32'}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} lg={2.5}>
+                  <OverviewCard
+                    sx={{ height: '100%', backgroundColor: '#415a77' }}
+                    value={countPkm}
+                    icon={<PeopleOutlined />}
+                    title={'Publikasi PkM'}
+                    iconColor={'#32ab32'}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid xs={12} sm={6} lg={2.5}>
               <OverviewCard
                 sx={{ height: '100%', backgroundColor: '#415a77' }}
@@ -186,6 +248,11 @@ const Dashboard = () => {
               <ActList
                 activities={recentActivity}
                 sx={{ height: '100%', backgroundColor: '#415a77' }}
+                title={
+                  user.role === 'LPPM'
+                    ? 'Pengumuman Terbaru'
+                    : 'Aktivitas Terbaru'
+                }
               />
             </Grid>
           </Grid>

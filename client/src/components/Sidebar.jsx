@@ -38,18 +38,18 @@ const navItemsDosen = [
     icon: <HomeOutlined />,
   },
   {
-    text: 'Profile',
-    route: null,
+    text: 'Profil',
+    route: 'profile',
     icon: <Person2Outlined />,
   },
   {
-    text: 'Announcement',
-    route: null,
+    text: 'Pengumuman',
+    route: 'announcement',
     icon: <AnnouncementOutlined />,
   },
   {
-    text: 'Activity',
-    route: null,
+    text: 'Aktivitas',
+    route: 'activity',
     icon: <AssignmentOutlined />,
   },
   {
@@ -89,18 +89,18 @@ const navItemsLppm = [
     icon: <HomeOutlined />,
   },
   {
-    text: 'Profile',
-    route: null,
+    text: 'Profil',
+    route: 'profile',
     icon: <Person2Outlined />,
   },
   {
-    text: 'Announcement',
-    route: null,
+    text: 'Pengumuman',
+    route: 'announcement',
     icon: <AnnouncementOutlined />,
   },
   {
-    text: 'Activity',
-    route: null,
+    text: 'Aktivitas',
+    route: 'activity',
     icon: <AssignmentOutlined />,
   },
   {

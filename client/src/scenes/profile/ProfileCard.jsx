@@ -29,12 +29,19 @@ const ProfileCard = () => {
   const [isEditProfPict, setIsEditProfPict] = useState(false);
   const [isChangePassword, setIsChangePassword] = useState(false);
   const [isOpenSnackbarPass, setIsOpenSnackbarPass] = useState(false);
+  const [isOpenSnackbarPassFalse, setIsOpenSnackbarPassFalse] = useState(false);
   const [isOpenSnackbarPict, setIsOpenSnackbarPict] = useState(false);
   const handleCloseSnackPass = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setIsOpenSnackbarPass(false);
+  };
+  const handleCloseSnackPassFalse = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setIsOpenSnackbarPassFalse(false);
   };
   const handleCloseSnackPict = (event, reason) => {
     if (reason === 'clickaway') {
@@ -63,6 +70,11 @@ const ProfileCard = () => {
       });
       const messageResponse = await response.json();
       console.log(messageResponse);
+      if (messageResponse.msg === 'invalid previous password') {
+        setIsOpenSnackbarPassFalse(true);
+        onSubmitProps.resetForm();
+        return;
+      }
       onSubmitProps.resetForm();
       setIsOpenSnackbarPass(true);
       setIsChangePassword(false);
@@ -177,7 +189,7 @@ const ProfileCard = () => {
                               >
                                 <input {...getInputProps()} />
                                 {!values.picture ? (
-                                  <p>Add Picture Here</p>
+                                  <p>Upload Gambar</p>
                                 ) : (
                                   <FlexBetween>
                                     <Typography>
@@ -201,7 +213,7 @@ const ProfileCard = () => {
                             '&:hover': { color: theme.palette.primary.main },
                           }}
                         >
-                          Change Picture
+                          Ubah Foto
                         </Button>
                       </form>
                     )}
@@ -222,7 +234,7 @@ const ProfileCard = () => {
                 }
               }}
             >
-              {!isEditProfPict ? 'Change Profile Picture' : 'Cancel'}
+              {!isEditProfPict ? 'Ganti Foto Profil' : 'Batal'}
             </Button>
           </CardActions>
           <Divider />
@@ -256,7 +268,7 @@ const ProfileCard = () => {
                         fullWidth
                         variant='filled'
                         type='password'
-                        label='Previous Password'
+                        label='Password Sebelumnya'
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.prevPassword}
@@ -269,7 +281,7 @@ const ProfileCard = () => {
                         fullWidth
                         variant='filled'
                         type='password'
-                        label='New Password'
+                        label='Password Baru'
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.newPassword}
@@ -288,7 +300,7 @@ const ProfileCard = () => {
                           '&:hover': { color: theme.palette.primary.main },
                         }}
                       >
-                        Change Password
+                        Ubah Password
                       </Button>
                     </form>
                   )}
@@ -308,11 +320,25 @@ const ProfileCard = () => {
                 }
               }}
             >
-              {!isChangePassword ? 'Change Password' : 'Cancel'}
+              {!isChangePassword ? 'Ubah Password' : 'Batal'}
             </Button>
           </CardActions>
         </Card>
       </Box>
+      <Snackbar
+        open={isOpenSnackbarPassFalse}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackPassFalse}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseSnackPassFalse}
+          severity='error'
+          sx={{ width: '100%' }}
+        >
+          Password Sebelumnya Salah!
+        </Alert>
+      </Snackbar>
       <Snackbar
         open={isOpenSnackbarPass}
         autoHideDuration={5000}

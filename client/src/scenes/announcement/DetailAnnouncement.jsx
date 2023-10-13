@@ -10,8 +10,10 @@ import {
   Box,
   Button,
   Chip,
+  Container,
   Paper,
   Snackbar,
+  TextField,
   Typography,
 } from '@mui/material';
 import Header from 'components/Header';
@@ -40,6 +42,14 @@ const DetailAnnouncement = ({
     }
     setOpenSnackbar(false);
   };
+
+  // const useStyles = makeStyles({
+  //   input: {
+  //     color: 'inherit', // Set the color to inherit from the parent element
+  //   },
+  // });
+
+  // const classes = useStyles();
 
   const getUserName = async (userId) => {
     try {
@@ -95,9 +105,9 @@ const DetailAnnouncement = ({
   }, [idAnnouncement]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    getUnFinishedReviewActivity(announcement._id);
     if (announcement) {
       getUserName(announcement.postedBy);
-      getUnFinishedReviewActivity(announcement._id);
     }
   }, [announcement]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -137,20 +147,43 @@ const DetailAnnouncement = ({
       {/* <Typography variant='subtitle2' gutterBottom>
         Program Date: {announcement.programDate}
       </Typography>*/}
+      <TextField
+        fullWidth
+        multiline
+        // rows={20}
+        maxRows={20}
+        variant='filled'
+        type='text'
+        value={announcement ? announcement.content : ''}
+        name='content'
+        color='inherit'
+        sx={{ gridColumn: 'span 6' }}
+        InputProps={{ readOnly: true }}
+      />
 
-      <Paper
+      {/* <Paper
         elevation={1}
         style={{
           padding: '16px',
           marginTop: '16px',
           textAlign: 'justify',
           width: '60vw',
+          maxWidth: '100%',
+          overflow: 'auto',
         }}
       >
-        <Typography variant='h5'>
-          {announcement ? announcement.content : ''}
-        </Typography>
-      </Paper>
+        <Container fixed>
+          <Box>
+                        <Typography variant='h5' maxWidth='100%'>
+              <pre
+                style={{ fontFamily: 'inherit', margin: 0, maxWidth: '100%' }}
+              >
+                {announcement ? announcement.content : ''}
+              </pre>
+            </Typography>
+          </Box>
+        </Container>
+      </Paper> */}
       {/* 
       <div style={{ marginTop: '16px' }}>
       <Typography variant='subtitle2' gutterBottom>
@@ -197,7 +230,7 @@ const DetailAnnouncement = ({
               color='secondary'
               variant='contained'
               onClick={() => {
-                if (countUnFinishedReviewActivity > 0) {
+                if (countUnFinishedReviewActivity === 0) {
                   setMode('surat-tugas');
                 } else {
                   setOpenSnackbar(true);

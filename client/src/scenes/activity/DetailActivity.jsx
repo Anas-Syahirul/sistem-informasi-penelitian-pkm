@@ -27,6 +27,7 @@ import React, { useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
+import dayjs from 'dayjs';
 
 const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
   const token = useSelector((state) => state.token);
@@ -42,6 +43,8 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
   const [isSubmitProposalRevision, setIsSubmitProposalRevision] =
     useState(false);
   const [isAddMonitoringNote, setIsAddMonitoringNote] = useState(false);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const getUserName = async (userId) => {
     try {
@@ -300,6 +303,14 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell width='30%'>Waktu Monitoring</TableCell>
+                  <TableCell width='70%'>
+                    <Typography>
+                      {activity ? activity.monitoringDate.slice(0, 10) : ''}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell width='30%'>Catatan Monitoring</TableCell>
                   <TableCell width='70%'>
                     <Typography>
@@ -394,11 +405,11 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
                     )}
                   </Dropzone>
                 </Box>
-                <Box display='flex' justifyContent='end'>
+                <Box display='flex' justifyContent='start'>
                   <Button
                     type='submit'
                     sx={{
-                      m: '1rem',
+                      m: '1rem 1rem',
                       p: '0.5rem',
                       backgroundColor: theme.palette.primary.main,
                       color: theme.palette.background.alt,
@@ -530,6 +541,7 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
         </Box>
       )}
       {activity.monitoringNote === '' &&
+        dayjs().isAfter(dayjs(activity.monitoringDate)) &&
         user.role === 'LPPM' &&
         !isAddMonitoringNote && (
           <Box display='flex' justifyContent='start' mt='20px' mb='20px'>
@@ -658,7 +670,7 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
                     >
                       <input {...getInputProps()} />
                       {!values.finalReport ? (
-                        <p>Add final Report Here</p>
+                        <p>Upload Laporan Akhir</p>
                       ) : (
                         <FlexBetween>
                           <Typography>{values.finalReport.name}</Typography>
@@ -692,7 +704,7 @@ const DetailActivity = ({ mode, setMode, activity, setActivity }) => {
                     '&:hover': { color: theme.palette.primary.main },
                   }}
                 >
-                  Submit Final Report
+                  Submit Laporan Akhir
                 </Button>
               </FlexBetween>
             </form>

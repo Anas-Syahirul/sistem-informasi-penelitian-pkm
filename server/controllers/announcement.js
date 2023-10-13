@@ -121,13 +121,13 @@ export const getAllAnnouncement = async (req, res) => {
     //   };
     // });
     // let announcement = []
-    for (let i = 0; i < announcements.length; i++) {
-      announcements[i].activityTypeId = ActivityType.findById(
-        announcements[i].activityTypeId
-      ).name;
-    }
+    // for (let i = 0; i < announcements.length; i++) {
+    //   announcements[i].activityTypeId = ActivityType.findById(
+    //     announcements[i].activityTypeId
+    //   ).name;
+    // }
     // const newAnnouncement = await updateDataAsync(announcements);
-    console.log(announcements[0]);
+    // console.log(announcements[0]);
     return res.status(200).json(announcements);
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -225,6 +225,53 @@ export const updateAnnouncement = async (req, res) => {
     return res
       .status(200)
       .json({ msg: 'The Announcement has been successfully updated' });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
+export const getAnnouncementActive = async (req, res) => {
+  try {
+    const today = new Date();
+    const announcements = await Announcement.find();
+    // const announcements = await Announcement.find({
+    //   status: 'active',
+    // });
+    const availableAnnouncements = [];
+    for (let i = 0; i < announcements.length; i++) {
+      console.log(
+        announcements[i].proposalSubmisionDeadline.getTime() > today.getTime()
+      );
+      if (
+        announcements[i].proposalSubmisionDeadline.getTime() > today.getTime()
+      ) {
+        availableAnnouncements.push(announcements[i]);
+      }
+    }
+    return res.status(200).json(availableAnnouncements);
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
+};
+
+export const getRecentAnnouncement = async (req, res) => {
+  try {
+    const today = new Date();
+    const availableAnnouncements = [];
+    // const user = await User.findById(req.user.id);
+    const announcements = await Announcement.find()
+      .sort({
+        createdAt: -1,
+      })
+      .limit(5);
+    for (let i = 0; i < announcements.length; i++) {
+      if (
+        announcements[i].proposalSubmisionDeadline.getTime() > today.getTime()
+      ) {
+        availableAnnouncements.push(announcements[i]);
+      }
+    }
+    return res.status(200).json(availableAnnouncements);
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }
