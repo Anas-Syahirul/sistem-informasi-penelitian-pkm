@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { setLogin } from 'state';
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import { Google } from '@mui/icons-material';
 
 const validationSchema = yup.object().shape({
   email: yup
@@ -127,6 +128,7 @@ const LoginForm = () => {
                 helperText={touched.password && errors.password}
                 sx={{ gridColumn: 'span 4' }}
               />
+
               <Box>
                 <Button
                   fullWidth
@@ -143,6 +145,14 @@ const LoginForm = () => {
                 </Button>
               </Box>
             </Box>
+            {/* <Button
+              startIcon={<Google />}
+              variant='contained'
+              color='primary'
+              // onClick={googleAuth}
+            >
+              Sign In With Google
+            </Button> */}
           </form>
         )}
       </Formik>

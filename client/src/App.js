@@ -1,7 +1,8 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Activity from 'scenes/activity';
 import Announcement from 'scenes/announcement';
@@ -12,12 +13,35 @@ import Layout from 'scenes/layout';
 import Login from 'scenes/login';
 import Profile from 'scenes/profile';
 import ReviewProposal from 'scenes/review-proposal';
+import { setLogin } from 'state';
 import { themeSettings } from 'theme';
 
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
+  const dispatch = useDispatch();
+
+  const getUser = async () => {
+    try {
+      const url = `${process.env.REACT_APP_API_URL}/auth/login/success`;
+      const { data } = await axios.get(url, { withCredentials: true });
+      dispatch(
+        setLogin({
+          user: data.user,
+          token: data.token,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuth) {
+      getUser();
+    }
+  }, []);
 
   return (
     <div className='app'>

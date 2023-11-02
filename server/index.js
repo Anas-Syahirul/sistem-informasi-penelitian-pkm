@@ -11,6 +11,9 @@ import announcementRoutes from './routes/announcement.js';
 import activityRoutes from './routes/activity.js';
 import letterOfAssignmentRoutes from './routes/letterOfAssignment.js';
 import cloudinary from 'cloudinary';
+import cookieSession from 'cookie-session';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 dotenv.config();
 const app = express();
@@ -20,7 +23,49 @@ app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: ['cyberwolve'],
+    maxAge: 24 * 60 * 60 * 100,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+  })
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+      scope: ['profile', 'email'],
+    },
+    function (accessToken, refreshToken, profile, done) {
+      var userProfile = profile;
+      return done(null, userProfile);
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;

@@ -72,3 +72,56 @@ export const login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const goJwtLogin = async (req, res) => {
+  // try {
+  if (req.user) {
+    const user1 = req.user;
+    const user = await User.findOne({ email: user1._json.email }).lean();
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    // error handling
+    // if (!user) {
+    //   return res.status(400).json({ msg: 'Invalid Email' });
+    // }
+    delete user.password;
+    return res.status(200).json({ token, user });
+    // res.status(200).json({
+    //   error: false,
+    //   message: 'Successfully Loged In',
+    //   user: req.user,
+    // });
+  } else {
+    return res.status(403).json({ error: true, message: 'Not Authorized' });
+  }
+
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // if (!isMatch) return res.status(400).json({ msg: 'Invalid Password' });
+  // } catch (err) {
+  //   return res.status(500).json({ error: err.message });
+  // }
+};
+
+export const goLoginSuccess = (req, res) => {
+  if (req.user) {
+    console.log(req.user);
+    res.status(200).json({
+      error: false,
+      message: 'Successfully Loged In',
+      user: req.user,
+    });
+  } else {
+    res.status(403).json({ error: true, message: 'Not Authorized' });
+  }
+};
+
+export const goLoginFail = async (req, res) => {
+  res.status(401).json({
+    error: true,
+    message: 'Log in failure',
+  });
+};
+
+export const goLogOut = async (req, res) => {
+  req.logout();
+  res.redirect(process.env.CLIENT_URL);
+};
